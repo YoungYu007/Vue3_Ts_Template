@@ -1,19 +1,16 @@
 <template>
     <main class="app-main">
-        <RouterView v-slot="{ Component, route }">
-            <Transition
-                mode="out-in"
-                name="fade"
-            >
-                <KeepAlive :include="['/']">
-                    <Component
+        <router-view v-slot="{ Component, route }">
+            <transition mode="out-in" name="fade">
+                <keep-alive :include="['/']">
+                    <component
                         :is="Component"
                         v-if="!route.meta.link"
                         :key="route.name"
                     />
-                </KeepAlive>
-            </Transition>
-        </RouterView>
+                </keep-alive>
+            </transition>
+        </router-view>
     </main>
 </template>
 
@@ -23,6 +20,4 @@ defineOptions({
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

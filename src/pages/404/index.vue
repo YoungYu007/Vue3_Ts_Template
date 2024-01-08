@@ -5,9 +5,7 @@ defineOptions({
 </script>
 
 <template>
-    <div class="not">
-        404 Not Found
-    </div>
+    <div class="not">404 Not Found</div>
 </template>
 
 <style lang="less" scoped>

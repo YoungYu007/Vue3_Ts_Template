@@ -1,11 +1,12 @@
 import { fileURLToPath, URL } from "node:url";
-
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { TDesignResolver } from "unplugin-vue-components/resolvers";
+
+const resolvePath = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -32,7 +33,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            "@": fileURLToPath(new URL("./src", import.meta.url))
+            "@": resolvePath("./src")
         },
         // 导入时想要省略的扩展名列表
         // 默认：[ ".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json" ]
@@ -44,7 +45,13 @@ export default defineConfig({
         // https://cn.vitejs.dev/config/shared-options.html#css-preprocessoroptions
         preprocessorOptions: {
             less: {
-                additionalData: `@import "src/styles/variables.less";`
+                javascriptEnabled: true,
+                // 第一种写法
+                // additionalData: `@import "src/styles/variables.less";`
+                // 第二种写法
+                modifyVars: {
+                    hack: `true; @import (reference) "${ resolvePath("./src/styles/variables.less") }";`
+                }
             }
         }
     }

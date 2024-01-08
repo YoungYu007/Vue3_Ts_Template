@@ -1,27 +1,45 @@
 <template>
-    <div class="layout-root">
+    <div
+        :class="[
+            'layout-root',
+            {
+                'hide-sidebar': !appSidebar.opened,
+                'open-sidebar': appSidebar.opened,
+                'without-animation': appSidebar.withoutAnimation,
+                mobile: device === 'mobile'
+            }
+        ]"
+        :style="{
+            '--current-color': theme
+        }"
+    >
         <!-- 导航栏 -->
-        <Sidebar class="layout-sidebar" />
+        <sidebar class="layout-sidebar" />
 
         <!-- 主体内容 -->
         <div class="layout-main">
             <div class="main-header">
                 header
+                <nav-bar />
             </div>
 
-            <AppMain class="main-content" />
+            <app-main class="main-content" />
 
-            <Setting />
+            <setting />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { AppMain, Setting, Sidebar } from "./components";
+import { AppMain, NavBar, Setting, Sidebar } from "./components";
 
 defineOptions({
     name: "Layout"
 });
+
+const theme = ref("light");
+const appSidebar = reactive({});
+const device = ref("");
 </script>
 
 <style lang="less" scoped>
@@ -31,7 +49,7 @@ defineOptions({
     display: flex;
 
     > .layout-sidebar {
-        width: 200px;
+        // width: 200px;
         background: #f0f0f0;
     }
 
