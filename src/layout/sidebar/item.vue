@@ -1,39 +1,41 @@
 <template>
-    <t-menu-item v-if="!item.children || item.children.length < 1" :value="item.name">
-        <template #icon>
-            <t-icon :name="item.meta.icon" />
-        </template>
-        {{ item.meta.title }}
-    </t-menu-item>
+    <template v-for="i in items" :key="i.path">
+        <t-menu-item
+            v-if="!i.children"
+            :value="i.name"
+        >
+            <template #icon>
+                <t-icon :name="i.meta.icon" />
+            </template>
+            {{ i.meta.title }}
+        </t-menu-item>
 
-    <t-submenu v-else :value="item.name">
-        <template #icon>
-            <t-icon :name="item.meta.icon" />
-        </template>
-        <template #title>
-            <span>{{ item.meta.title }}</span>
-        </template>
+        <t-submenu v-else :value="i.path">
+            <template #icon>
+                <t-icon :name="i.meta.icon" />
+            </template>
+            <template #title>
+                <span>{{ i.meta.title }}</span>
+            </template>
 
-        <item
-            v-for="child in item.children"
-            :key="child.name"
-            :base-path="child.path"
-            :item="child"
-        />
-    </t-submenu>
+            <item :items="i.children" />
+        </t-submenu>
+    </template>
 </template>
 
 <script lang="ts" setup>
-import type { RouteRecordRaw } from "vue-router";
+import type { RouteMeta, RouteRecordRaw } from "vue-router";
 import type { PropType } from "vue";
+
+type RouteItem = { meta: RouteMeta } & RouteRecordRaw;
 
 defineOptions({
     name: "Item"
 });
 
-defineProps({
-    item: {
-        type: Object as PropType<RouteRecordRaw>,
+const props = defineProps({
+    items: {
+        type: Array as PropType<RouteItem[]>,
         required: true
     },
     isNest: {
@@ -45,4 +47,13 @@ defineProps({
         default: ""
     }
 });
+
+console.log("items", props.items);
 </script>
+
+<style lang="less" scoped>
+// 防止图标大小被压缩
+.t-icon {
+    flex-shrink: 0;
+}
+</style>

@@ -1,5 +1,7 @@
 <template>
-    <div class="sidebar-logo">logo</div>
+    <div class="page-table">
+        table page
+    </div>
 </template>
 
 <script lang="ts" setup>

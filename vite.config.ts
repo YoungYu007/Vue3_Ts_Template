@@ -4,7 +4,7 @@ import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
-import { TDesignResolver } from "unplugin-vue-components/resolvers";
+import { NaiveUiResolver, TDesignResolver } from "unplugin-vue-components/resolvers";
 
 const resolvePath = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 
@@ -14,7 +14,19 @@ export default defineConfig({
         vue(),
         vueJsx(),
         AutoImport({
-            imports: [ "vue", "vue-router", "pinia" ],
+            imports: [
+                "vue",
+                "vue-router",
+                "pinia",
+                {
+                    "naive-ui": [
+                        "useDialog",
+                        "useMessage",
+                        "useNotification",
+                        "useLoadingBar"
+                    ]
+                }
+            ],
             dts: "types/auto-import.d.ts",
             resolvers: [
                 TDesignResolver({
@@ -27,7 +39,8 @@ export default defineConfig({
             resolvers: [
                 TDesignResolver({
                     library: "vue-next"
-                })
+                }),
+                NaiveUiResolver()
             ]
         })
     ],

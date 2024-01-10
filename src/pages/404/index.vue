@@ -1,15 +1,18 @@
+<template>
+    <div class="page-not">
+        <h3>404</h3>
+    </div>
+</template>
+
 <script lang="ts" setup>
 defineOptions({
     name: "Not"
 });
 </script>
 
-<template>
-    <div class="not">404 Not Found</div>
-</template>
 
 <style lang="less" scoped>
 .not {
-    color: @blue;
+    color: red;
 }
 </style>

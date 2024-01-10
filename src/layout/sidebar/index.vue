@@ -1,38 +1,57 @@
 <template>
     <div :class="['sidebar', { 'show-logo': showLogo }]">
         <logo />
+        <!-- tdesign ui -->
         <t-menu>
-            <item
-                v-for="item in items"
-                :key="item.name"
-                :base-path="item.path"
-                :item="item"
-            />
+            <item :items="routes" />
         </t-menu>
+        <!-- naive ui -->
+        <!-- <n-menu
+            :options="menus"
+            key-field="path"
+            label-field="title"
+            icon-field="icon"
+            children-field="children"
+        /> -->
+        <!-- 折叠 -->
+        <div class="collapse">
+            <div class="collapse-icon" @click="showLogo =!showLogo">
+                <i class="iconfont icon-menu" />
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import Logo from "./logo";
-import { routes } from "@/router";
 import Item from "./item.vue";
+import { routes } from "@/router";
+import type { RouteMeta } from "vue-router";
 
 defineOptions({
     name: "Sidebar"
 });
 
-const showLogo = ref(false);
-console.log(routes);
-const items = routes.map(route => {
-    if (!route.meta) {
-        route.meta = {
-            title: route.name,
-            icon: "app"
-        };
-    }
+const genRoute = (items) => {
+    return items.map((item) => {
+        item.title = item?.meta?.title;
+        item.icon = item?.meta?.icon;
 
-    return route;
-});
+        if (item.children) {
+            item.children = genRoute(item.children);
+        }
+
+        return item
+    })
+}
+
+const showLogo = ref(false);
+const menus = genRoute(routes);
+console.log(menus);
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.collapse {
+    height: 30px;
+}
+</style>
